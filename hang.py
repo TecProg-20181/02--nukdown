@@ -1,6 +1,6 @@
 import random
 import string
-
+import os
 WORDLIST_FILENAME = "palavras.txt"
 
 def loadWords():
@@ -8,14 +8,12 @@ def loadWords():
     Depending on the size of the word list, this function may
     take a while to finish.
     """
-    print "Loading word list from file..."
     # inFile: file
     inFile = open(WORDLIST_FILENAME, 'r', 0)
     # line: string
     line = inFile.readline()
     # wordlist: list of strings
     wordlist = string.split(line)
-    print "  ", len(wordlist), "words loaded."
     return random.choice(wordlist)
 
 
@@ -51,16 +49,17 @@ def getAvailableLetters():
 
     return available
 
-def hangman(secretWord):
-
-    guesses = 8
-    lettersGuessed = []
+def menu(hangman):
     print 'Welcome to the game, Hangam!'
     print 'I am thinking of a word that is', len(secretWord), ' letters long.'
     print '-------------'
 
+    return
+
+def hangman(secretWord):
+    guesses = len(loadWords())
+    lettersGuessed = []
     while  isWordGuessed(secretWord, lettersGuessed) == False and guesses >0:
-        print 'You have ', guesses, 'guesses left.'
 
         available = getAvailableLetters()
         for letter in available:
@@ -70,7 +69,6 @@ def hangman(secretWord):
         print 'Available letters', available
         letter = raw_input('Please guess a letter: ')
         if letter in lettersGuessed:
-
             guessed = getGuessedWord()
             for letter in secretWord:
                 if letter in lettersGuessed:
@@ -108,10 +106,25 @@ def hangman(secretWord):
         if isWordGuessed(secretWord, lettersGuessed) == True:
             print 'Congratulations, you won!'
         else:
+            _=os.system("clear")
             print 'Sorry, you ran out of guesses. The word was ', secretWord, '.'
 
 
 
-
-secretWord = loadWords().lower()
-hangman(secretWord)
+def menu():
+    print 'Welcome to the game, Hangman!'
+    print 'Menu'
+    print ("       1 - New game\n       2 - Exit")
+    option = raw_input ()
+    if option=="1":
+        _=os.system("clear")
+        secretWord = loadWords()
+        hangman(secretWord)
+    elif option=="2":
+        _=os.system("clear")
+        print 'YOU\nARE\nA\nLOSER\nDO\nIT\nAGAIN'
+        menu(0)
+    else:
+        menu(0)
+_=os.system("clear")
+menu()
